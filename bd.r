@@ -162,10 +162,10 @@ descriptor_distance = function(descriptor1,descriptor2){
     print(paste0("Dimension=", dim(descriptor2)[1]," ",dim(descriptor2)[2]," length =",length(dim(descriptor2))))
     
     if(length(dim(descriptor1)) == length(dim(descriptor2))){
-      if(length(dim(descriptor1))==1){
-        d<-norm(descriptor1-descriptor2,"2")
+      if(length(dim(descriptor1)) == 1){
+        d <- norm(descriptor1-descriptor2,"2")
         return(d) 
-      }else if(length(dim(descriptor1))==2 && dim(descriptor1)[1]==dim(descriptor2)[1] && dim(descriptor1)[2] == dim(descriptor2)[2]){
+      }else if(length(dim(descriptor1)) == 2 && dim(descriptor1)[1] == dim(descriptor2)[1] && dim(descriptor1)[2] == dim(descriptor2)[2]){
         print("Dimensions are same")
         d<- 0.0
         n<-dim(descriptor1)[1]
@@ -195,13 +195,13 @@ descriptor_distance = function(descriptor1,descriptor2){
 descriptor_set_distance = function(descriptor_set1, descriptor_set2){
   d <- .Machine$double.xmax
   for(i in 1: length(descriptor_set1)){
-    if(length(descriptor_set2)>0){
+    if(length(descriptor_set2) > 0){
       for(j in 1:length(descriptor_set2)){
-        descriptor_set2c<-descriptor_set2[[j]]
-        dij<-descriptor_distance(descriptor_set1[i],descriptor_set2c)
+        descriptor_set2c <- descriptor_set2[[j]]
+        dij <- descriptor_distance(descriptor_set1[i],descriptor_set2c)
         print(dij)
-        if(dij<d){
-            d<-dij
+        if(dij < d){
+            d <- dij
         }
       }
     }
@@ -216,32 +216,31 @@ descriptor_set_distance = function(descriptor_set1, descriptor_set2){
 #' @return: The name of the file that is most similar
 #'   
 browndog.find = function(dts,query_filename,wait=60,key=''){
-  metadata <- browndog.extract(dts,query_filename,wait,key)
-  tags <- fromJSON(metadata)$tags
-  versusmd <- fromJSON(metadata)$versusmetadata
+  metadata  <- browndog.extract(dts,query_filename,wait,key)
+  tags      <- fromJSON(metadata)$tags
+  versusmd  <- fromJSON(metadata)$versusmetadata
   query_descriptors <- list(versusmd$descriptor[[1]])
   if(!is.null(tags) && length(tags)!= 0){
     for(i in 1:length(tags)){
       query_descriptors <- append(query_descriptors,tags[i])
     }  
   }
-  ranking <- hash()
-  path_to_index <-"/Users/smruti/Documents/NCSAResearch/browndog/QinaUseCase/DW-Workflow/flood-plain-tool/pytool1/examples/"
-  index_fr<-file(paste0(path_to_index,".index.tsv"),"r")
-  lines<-readLines(index_fr)
+  ranking       <- hash()
+  path_to_index <- "path/to/index"
+  index_fr      <- file(paste0(path_to_index,".index.tsv"),"r")
+  lines         <- readLines(index_fr)
   for(i in 1:length(lines)){
-    #print(lines[i])
     line        <- strsplit(lines[i],'\t')
     filename    <- line[[1]][1]
     descriptors <- list()
     if(length(line[[1]])>1){
       for(j in 2:length(line[[1]])){
-        descriptors<-c(descriptors,line[[1]][j])
+        descriptors <- c(descriptors,line[[1]][j])
       }
     }
     print(paste0("filename: ",filename))
     d <- descriptor_set_distance(query_descriptors,descriptors)
-    ranking[filename]<-d
+    ranking[filename] <- d
     print(ranking)
   }
   close(index_fr)
