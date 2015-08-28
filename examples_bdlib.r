@@ -1,4 +1,4 @@
-source("/Users/smruti/Documents/NCSAResearch/browndog/BD-R/bd.r")
+source("path/to/bd.r")
 example.convert = function(){
   dap            <- "dap-dev.ncsa.illinois.edu"
   input_filename <- "path/to/filename"
