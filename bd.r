@@ -5,6 +5,24 @@ require(jsonlite)
 require(gdata)
 require(hash)
 
+#'Check DAP for available output formats for the given input format.
+#'@param dap: The URL to the Data Access Proxy to use.
+#'@param input: The format of the input file.
+#'@return: A string array of reachable output format extensions.
+browndog.outputs = function(dap, inputformat){
+  userpass    <- "username:password"
+  curloptions <- list(userpwd = userpass, httpauth = 1L)
+  api_call    <- paste0("http://", dap, ":8184/inputs/", inputformat)
+  httpheader  <- c("Accept" = "text/plain")
+  r   <- httpGET(url = api_call, httpheader = httpheader,curl = curlSetOpt(.opts = curloptions))
+  arr <- strsplit(r,"\n")
+  if(length(arr[[1]]) == 0){
+    return(list())
+  } else{
+    return(arr)
+  }
+}
+
 # Try and download a file.
 # 
 # This will download a file, if a 404 is returned it will wait until
