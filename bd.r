@@ -46,14 +46,21 @@ browndog.download = function(url, file, timeout = 60, .opts = list()) {
 
 browndog.convert = function (dap, input_filename, output, output_path, wait=60){
   port <- 8184
-  convert_api <- paste0("http://", dap,":", port,"/convert/", output, "/") 
   userpass    <- "username:password"  
-  curloptions <- list(userpwd = userpass, httpauth = 1L, followlocation=TRUE)
+  if(grepl("@",dap)){
+    auth_host   <- strsplit(dap,'@')
+    dap         <- auth_host[[1]][2]
+    auth        <- strsplit(auth_host[[1]][1],'//')
+    userpass    <- URLdecode(auth[[1]])
+  }
+  convert_api <- paste0("http://", dap,":", port,"/convert/", output, "/") 
+  curloptions <- list(userpwd = userpass, httpauth = 1L, followlocation = TRUE)
   headers     <- c("Accept"="text/plain")
   result_dap  <- postForm(convert_api,"file"= fileUpload(input_filename),.opts=curloptions)
   result_dap 
   url             <- gsub('.*<a.*>(.*)</a>.*', '\\1', result_dap)
-  outputfile      <- paste0(output_path,"imagec.png")
+  inputbasename   <- strsplit(basename(input_filename),'\\.')
+  outputfile      <- paste0(output_path,inputbasename[[1]][1],".", output)
   output_filename <- download.browndog(url, outputfile, wait, curloptions)
   return(output_filename)
 }
