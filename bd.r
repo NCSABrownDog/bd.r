@@ -5,6 +5,52 @@ require(jsonlite)
 require(gdata)
 require(hash)
 
+source("config.r")
+source("key.r")
+
+browndog.getKey = function(bdServer){
+  if(key != ""){
+    return(key)
+  }
+  if(grepl("@", bdServer)){
+    auth_host   <- strsplit(bdServer,'@')
+    bds         <- auth_host[[1]][2]
+    auth        <- strsplit(auth_host[[1]][1],'//')
+    userpass    <- URLdecode(auth[[1]][2])
+    bdsURL      <- paste0(auth[[1]][1],"//",bds)
+  }else{
+    userpass <- paste0(username,":", password)
+    bdsURL   <- bdServer
+  }
+  print(bdsURL)
+  print(userpass)
+  curloptions <- list(userpwd = userpass, httpauth = 1L)
+  httpheader <- c("Accept" = "application/json")
+  responseKey   <- httpPOST(url = bdsURL, httpheader = httpheader,curl = curlSetOpt(.opts = curloptions))
+  key <- fromJSON(responseKey)[[1]]
+  return(key) 
+}
+
+browndog.saveKey = function(key){
+  fileConn<-file("key.r")
+  keys<-paste0("key <-", "\"",key,"\"")
+  write(c(keys), fileConn, append = TRUE)
+  close(fileConn)
+}
+
+browndog.getToken = function(bdServer){
+  userpass <- paste0(username,":", password)
+  curloptions <- list(userpwd = userpass, httpauth = 1L)
+  httpheader <- c("Accept" = "application/json")
+  bdsURL     <- paste0(bdServer,"/keys/",key,"/tokens")
+  print(bdsURL)
+  print(userpass)
+  responseKey   <- httpPOST(url = bdsURL, httpheader = httpheader,curl = curlSetOpt(.opts = curloptions))
+  token <- fromJSON(responseToken)[[1]]
+  return(token)
+}
+
+
 #'Check DAP for available output formats for the given input format.
 #'@param dap: The URL to the Data Access Proxy to use.
 #'@param input: The format of the input file.
