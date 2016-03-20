@@ -137,11 +137,11 @@ browndog.convert = function (bds, input_filename, output, output_path, wait=60){
 #' @param key: The key for the DTS. Default is ''.
 #' @return The extracted metadata in JSON format
 #'  
-browndog.extract = function (dts, file, wait = 60, key){
+browndog.extract = function (bds, file, wait = 60, key){
   port <-"9000"
-  if(grepl("@",dts)){
-    auth_host   <- strsplit(dts,'@')
-    dts         <- auth_host[[1]][2]
+  if(grepl("@",bds)){
+    auth_host   <- strsplit(bds,'@')
+    bds         <- auth_host[[1]][2]
     auth        <- strsplit(auth_host[[1]][1],'//')
     userpass    <- URLdecode(auth[[1]])
     curloptions <- list(userpwd = userpass, httpauth = 1L)
@@ -150,19 +150,19 @@ browndog.extract = function (dts, file, wait = 60, key){
     postbody   <- toJSON(list(fileurl = unbox(file)))
     httpheader <- c("Content-Type" = "application/json", "Accept" = "application/json")
     if(key == ''){
-      uploadurl  <- paste0("http://", dts,":", port, "/api/extractions/upload_url")
+      uploadurl  <- paste0("http://", bds,":", port, "/api/extractions/upload_url")
       res_upload <- httpPOST(url = uploadurl, postfields = postbody, httpheader = httpheader, curl = curlSetOpt(.opts = curloptions))
     } else{
-      uploadurl  <- paste0("http://", dts,":", port, "/api/extractions/upload_url?key=", key)
+      uploadurl  <- paste0("http://", bds,":", port, "/api/extractions/upload_url?key=", key)
       res_upload <- httpPOST(url = uploadurl, postfields = postbody, httpheader = httpheader)
     }
    } else{
      if(key == ''){
-       res_upload <- postForm(paste0("http://", dts,":", port, "/api/extractions/upload_file"),
+       res_upload <- postForm(paste0("http://", bds,":", port, "/api/extractions/upload_file"),
                       "File" = fileUpload(file),
                      .opts = curloptions)
      } else{
-       res_upload <- postForm(paste0("http://", dts,":", port, "/api/extractions/upload_file?key=", key),
+       res_upload <- postForm(paste0("http://", bds,":", port, "/api/extractions/upload_file?key=", key),
                             "File" = fileUpload(file),
                             .opts = list())
      }
@@ -172,7 +172,7 @@ browndog.extract = function (dts, file, wait = 60, key){
   httpheader  <- c("Accept" = "application/json")
   if (file_id != ""){
     while (wait > 0){
-      res_status <- httpGET(url = paste0("http://", dts,":", port, "/api/extractions/",file_id,"/status"), httpheader = httpheader)
+      res_status <- httpGET(url = paste0("http://", bds,":", port, "/api/extractions/",file_id,"/status"), httpheader = httpheader)
       status     <- fromJSON(res_status)
       if (status$Status == "Done"){
         break
@@ -180,11 +180,11 @@ browndog.extract = function (dts, file, wait = 60, key){
       Sys.sleep(2)
       wait <- wait -1  
     }
-    res_tags     <- httpGET(url = paste0("http://", dts, ":" , port,"/api/files/", file_id,"/tags"), httpheader = httpheader)
+    res_tags     <- httpGET(url = paste0("http://", bds, ":" , port,"/api/files/", file_id,"/tags"), httpheader = httpheader)
     tags         <- fromJSON(res_tags)
-    res_techmd   <- httpGET(url = paste0("http://", dts, ":", port,"/api/files/",file_id,"/technicalmetadatajson"), httpheader = httpheader)
+    res_techmd   <- httpGET(url = paste0("http://", bds, ":", port,"/api/files/",file_id,"/technicalmetadatajson"), httpheader = httpheader)
     techmd       <- fromJSON(res_techmd, simplifyDataFrame = FALSE)
-    res_vmd      <- httpGET(url = paste0("http://", dts, ":", port, "/api/files/",file_id,"/versus_metadata"), httpheader = httpheader)
+    res_vmd      <- httpGET(url = paste0("http://", bds, ":", port, "/api/files/",file_id,"/versus_metadata"), httpheader = httpheader)
     versusmd     <- fromJSON(res_vmd)
     metadatalist <- list(id = unbox(tags$id), filename = unbox(tags$filename), tags = tags$tags, technicalmetadata = techmd, versusmetadata = versusmd)
     metadata <- toJSON(metadatalist)
@@ -199,7 +199,7 @@ browndog.extract = function (dts, file, wait = 60, key){
 #' @param key: The key for the DTS. Deafult is ''.
 #' @return: The indexed directory. A '.index.tsv' file will now be present containing the derived data
 
-browndog.index = function(dts, directory, wait=60, key=''){
+browndog.index = function(bds, directory, wait=60, key=''){
   #if(!endsWith(directory,'/')){
   #  directory<-paste0(directory,'/')
   #}
@@ -208,7 +208,7 @@ browndog.index = function(dts, directory, wait=60, key=''){
   files<-list.files(directory)
   for(i in 1:length(files)){
     #print(files[i])
-    metadata <- browndog.extract(dts, paste0(directory,files[i]), wait, key)
+    metadata <- browndog.extract(bds, paste0(directory,files[i]), wait, key)
     tags<-fromJSON(metadata)$tags
     #print(tags)
     line<- toString(files[i])
@@ -299,13 +299,13 @@ descriptor_set_distance = function(descriptor_set1, descriptor_set2){
 }
 
 #' Search a directory for similar files to the query. Directory must be indexed already and a '.index.tsv' present
-#' @param dts: The URL to the Data Tilling service to use
+#' @param bds: The URL to the Data Tilling service to use
 #' @param query_filename: The query file
 #' @param key: The key for the DTS. Default is ''.
 #' @return: The name of the file that is most similar
 #'   
-browndog.find = function(dts,query_filename,wait=60,key=''){
-  metadata  <- browndog.extract(dts,query_filename,wait,key)
+browndog.find = function(bds,query_filename,wait=60,key=''){
+  metadata  <- browndog.extract(bds,query_filename,wait,key)
   tags      <- fromJSON(metadata)$tags
   versusmd  <- fromJSON(metadata)$versusmetadata
   query_descriptors <- list(versusmd$descriptor[[1]])
