@@ -108,21 +108,21 @@ browndog.download = function(url, file, timeout = 60, .opts = list()) {
 #' @param wait: The amount of time to wait for the DAP service to respond. Default is 60
 #' @return: The output filename 
 
-browndog.convert = function (dap, input_filename, output, output_path, wait=60){
+browndog.convert = function (bds, input_filename, output, output_path, wait=60){
   port <- 8184
   userpass    <- "username:password"  
-  if(grepl("@",dap)){
-    auth_host   <- strsplit(dap,'@')
-    dap         <- auth_host[[1]][2]
+  if(grepl("@",bds)){
+    auth_host   <- strsplit(bds,'@')
+    bds         <- auth_host[[1]][2]
     auth        <- strsplit(auth_host[[1]][1],'//')
     userpass    <- URLdecode(auth[[1]])
   }
-  convert_api <- paste0("http://", dap,":", port,"/convert/", output, "/") 
-  curloptions <- list(userpwd = userpass, httpauth = 1L, followlocation = TRUE)
+  convert_api <- paste0("http://", bds,"/dap/convert/", output, "/") 
+  curloptions <- list(authorization=token, httpauth = no_auth, followlocation = TRUE)
   headers     <- c("Accept"="text/plain")
-  result_dap  <- postForm(convert_api,"file"= fileUpload(input_filename),.opts=curloptions)
-  result_dap 
-  url             <- gsub('.*<a.*>(.*)</a>.*', '\\1', result_dap)
+  result_bds  <- postForm(convert_api,"file"= fileUpload(input_filename),.opts=curloptions)
+  result_bds 
+  url             <- gsub('.*<a.*>(.*)</a>.*', '\\1', result_bds)
   inputbasename   <- strsplit(basename(input_filename),'\\.')
   outputfile      <- paste0(output_path,inputbasename[[1]][1],".", output)
   output_filename <- download.browndog(url, outputfile, wait, curloptions)
