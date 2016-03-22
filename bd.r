@@ -1,66 +1,66 @@
 #!/usr/bin/Rscript
-require(bitops)
-require(RCurl)
-require(jsonlite)
-require(gdata)
-require(hash)
+library(RCurl)
+library(bitops)
+library(hash)
+library(jsonlite)
+library(gdata)
 
-source("config.r")
-source("key.r")
+source("/path/to/config.r")
+source("/path/to/key.r")
 
-browndog.getKey = function(bdServer){
+browndog.getKey = function(bds){
   if(key != ""){
     return(key)
   }
-  if(grepl("@", bdServer)){
-    auth_host   <- strsplit(bdServer,'@')
+  if(grepl("@", bds)){
+    auth_host   <- strsplit(bds,'@')
     bds         <- auth_host[[1]][2]
     auth        <- strsplit(auth_host[[1]][1],'//')
     userpass    <- URLdecode(auth[[1]][2])
     bdsURL      <- paste0(auth[[1]][1],"//",bds)
   }else{
     userpass <- paste0(username,":", password)
-    bdsURL   <- bdServer
+    bdsURL   <- bds
   }
-  print(bdsURL)
-  print(userpass)
+  #print(bdsURL)
+  #print(userpass)
   curloptions <- list(userpwd = userpass, httpauth = 1L)
   httpheader <- c("Accept" = "application/json")
-  responseKey   <- httpPOST(url = bdsURL, httpheader = httpheader,curl = curlSetOpt(.opts = curloptions))
+  responseKey <- httpPOST(url = bdsURL, httpheader = httpheader,curl = curlSetOpt(.opts = curloptions))
   key <- fromJSON(responseKey)[[1]]
   return(key) 
 }
 
 browndog.saveKey = function(key){
-  fileConn<-file("key.r")
-  keys<-paste0("key <-", "\"",key,"\"")
+  fileConn <- file("/path/to/key.r")
+  keys <- paste0("key <-", "\"",key,"\"")
   write(c(keys), fileConn, append = TRUE)
   close(fileConn)
 }
 
-browndog.getToken = function(bdServer){
+browndog.getToken = function(bds){
   userpass <- paste0(username,":", password)
   curloptions <- list(userpwd = userpass, httpauth = 1L)
   httpheader <- c("Accept" = "application/json")
-  bdsURL     <- paste0(bdServer,"/keys/",key,"/tokens")
-  print(bdsURL)
-  print(userpass)
-  responseKey   <- httpPOST(url = bdsURL, httpheader = httpheader,curl = curlSetOpt(.opts = curloptions))
+  bdsURL     <- paste0(bds,"/keys/",key,"/tokens")
+  #print(bdsURL)
+  #print(userpass)
+  responseToken  <- httpPOST(url = bdsURL, httpheader = httpheader,curl = curlSetOpt(.opts = curloptions))
   token <- fromJSON(responseToken)[[1]]
   return(token)
 }
 
 
 #'Check DAP for available output formats for the given input format.
-#'@param dap: The URL to the Data Access Proxy to use.
+#'@param bds: The URL to the Data Access Proxy to use.
 #'@param input: The format of the input file.
 #'@return: A string array of reachable output format extensions.
 browndog.outputs = function(bds, inputformat){
   userpass    <- "username:password"
-  curloptions <- list(authorization=token, httpauth = no_auth)
-  api_call    <- paste0("http://", bds, "/dap/inputs/", inputformat)
-  httpheader  <- c("Accept" = "text/plain")
-  r   <- httpGET(url = api_call, httpheader = httpheader,curl = curlSetOpt(.opts = curloptions))
+  api_call    <- paste0("https://", bds, "/dap/inputs/", inputformat)
+  #api_call    <- paste0(bds, "/dap/inputs/", inputformat)  #localhost
+  httpheader  <- c("Accept" = "text/plain", "Authorization" = token)
+  r   <- httpGET(url = api_call, httpheader = httpheader)
   arr <- strsplit(r,"\n")
   if(length(arr[[1]]) == 0){
     return(list())
@@ -85,8 +85,9 @@ browndog.outputs = function(bds, inputformat){
 #        protected site use list(userpwd=userpass, httpauth = 1L)
 #' @return returns name of file if successfull or NA if not.
 #' 
-browndog.download = function(url, file, timeout = 60, .opts = list()) {
+browndog.download = function(url, file, timeout = 60) {
   count <- 0
+  .opts <- list(userpwd = dap_userpwd, httpauth = 1L, followlocation = TRUE)
   while (!url.exists(url,.opts = .opts) && count < timeout) {
     count <- count + 1
     Sys.sleep(1)
@@ -101,7 +102,7 @@ browndog.download = function(url, file, timeout = 60, .opts = list()) {
 }
 
 # Convert a file using DAP
-#' @param dap: The URL to the Data Access Proxy to use
+#' @param bds: The URL to the Brown Dog Server to use
 #' @param input_filename: The input filename
 #' @param output: The output format extension
 #' @param output_path: The path for the created output file. May contain different filename
@@ -109,23 +110,17 @@ browndog.download = function(url, file, timeout = 60, .opts = list()) {
 #' @return: The output filename 
 
 browndog.convert = function (bds, input_filename, output, output_path, wait=60){
-  port <- 8184
-  userpass    <- "username:password"  
-  if(grepl("@",bds)){
-    auth_host   <- strsplit(bds,'@')
-    bds         <- auth_host[[1]][2]
-    auth        <- strsplit(auth_host[[1]][1],'//')
-    userpass    <- URLdecode(auth[[1]])
-  }
-  convert_api <- paste0("http://", bds,"/dap/convert/", output, "/") 
-  curloptions <- list(authorization=token, httpauth = no_auth, followlocation = TRUE)
-  headers     <- c("Accept"="text/plain")
-  result_bds  <- postForm(convert_api,"file"= fileUpload(input_filename),.opts=curloptions)
-  result_bds 
+  convert_api <- paste0("https://", bds,"/dap/convert/", output, "/") 
+  #convert_api <- paste0(bds,"/dap/convert/", output, "/")  # for localhost
+  httpheader <- c(Accept="text/plain", Authorization = token)
+  curloptions <- list(httpheader = httpheader)
+  result_bds <- postForm(convert_api,"file"= fileUpload(input_filename),.opts = curloptions)
+  #print(result_bds) 
   url             <- gsub('.*<a.*>(.*)</a>.*', '\\1', result_bds)
   inputbasename   <- strsplit(basename(input_filename),'\\.')
   outputfile      <- paste0(output_path,inputbasename[[1]][1],".", output)
-  output_filename <- download.browndog(url, outputfile, wait, curloptions)
+  #print(outputfile)
+  output_filename <- browndog.download(url[1], outputfile, wait)
   return(output_filename)
 }
 
@@ -137,55 +132,52 @@ browndog.convert = function (bds, input_filename, output, output_path, wait=60){
 #' @param key: The key for the DTS. Default is ''.
 #' @return The extracted metadata in JSON format
 #'  
-browndog.extract = function (bds, file, wait = 60, key){
-  if(grepl("@",bds)){
-    auth_host   <- strsplit(bds,'@')
-    bds         <- auth_host[[1]][2]
-    auth        <- strsplit(auth_host[[1]][1],'//')
-    userpass    <- URLdecode(auth[[1]])
-    curloptions <- list(userpwd = userpass, httpauth = 1L)
-  }
+browndog.extract = function (bds, file, wait = 60){
   if(startsWith(file,'http://') || startsWith(file,'https://')){
     postbody   <- toJSON(list(fileurl = unbox(file)))
-    httpheader <- c("Content-Type" = "application/json", "Accept" = "application/json")
-    if(key == ''){
-      uploadurl  <- paste0("http://", bds,"/dts/api/extractions/upload_url")
-      res_upload <- httpPOST(url = uploadurl, postfields = postbody, httpheader = httpheader, curl = curlSetOpt(.opts = curloptions))
-    } else{
-      uploadurl  <- paste0("http://", bds,"/dts/api/extractions/upload_url?key=", key)
-      res_upload <- httpPOST(url = uploadurl, postfields = postbody, httpheader = httpheader)
+    #print(postbody)
+    httpheader <- c("Content-Type" = "application/json", "Accept" = "application/json", "Authorization" = token)
+    uploadurl  <- paste0("https://", bds,"/dts/api/extractions/upload_url") #for localhost
+    #uploadurl  <- paste0(bds,"/dts/api/extractions/upload_url")
+    res_upload <- httpPOST(url = uploadurl, postfields = postbody, httpheader = httpheader)
+  } else{
+    httpheader <- c(Accept = "application/json", Authorization = token)
+    curloptions <-list(httpheader=httpheader)
+    res_upload <- postForm(paste0("https://", bds,"/dts/api/extractions/upload_file"),
+                  "File" = fileUpload(file),
+                 .opts = curloptions)
+    #res_upload <- postForm(paste0(bds,"/dts/api/extractions/upload_file"),
+    #                       "File" = fileUpload(file),
+    #                       .opts = curloptions)
     }
-   } else{
-     if(key == ''){
-       res_upload <- postForm(paste0("http://", bds,"/dts/api/extractions/upload_file"),
-                      "File" = fileUpload(file),
-                     .opts = curloptions)
-     } else{
-       res_upload <- postForm(paste0("http://", bds,"/dts/api/extractions/upload_file?key=", key),
-                            "File" = fileUpload(file),
-                            .opts = list())
-     }
-  }
   r           <- fromJSON(res_upload)
   file_id     <- r$id
-  httpheader  <- c("Accept" = "application/json")
+  print(file_id)
+  httpheader  <- c(Accept = "application/json", Authorization = token )
   if (file_id != ""){
     while (wait > 0){
       res_status <- httpGET(url = paste0("http://", bds, "/dts/api/extractions/",file_id,"/status"), httpheader = httpheader)
       status     <- fromJSON(res_status)
       if (status$Status == "Done"){
+        #print(status)
         break
       }
       Sys.sleep(2)
       wait <- wait -1  
     }
-    res_tags     <- httpGET(url = paste0("http://", bds, "/dts/api/files/", file_id,"/tags"), httpheader = httpheader)
+    #res_tags     <- httpGET(url = paste0("http://", bds, "/dts/api/files/", file_id,"/tags"), httpheader = httpheader)
+    res_tags     <- httpGET(url = paste0(bds, "/dts/api/files/", file_id,"/tags"), httpheader = httpheader)
     tags         <- fromJSON(res_tags)
-    res_techmd   <- httpGET(url = paste0("http://", bds,"/dts/api/files/",file_id,"/technicalmetadatajson"), httpheader = httpheader)
+    #print(tags)
+    #res_techmd   <- httpGET(url = paste0("http://", bds,"/dts/api/files/",file_id,"/technicalmetadatajson"), httpheader = httpheader)
+    res_techmd   <- httpGET(url = paste0(bds,"/dts/api/files/",file_id,"/technicalmetadatajson"), httpheader = httpheader)
     techmd       <- fromJSON(res_techmd, simplifyDataFrame = FALSE)
-    res_vmd      <- httpGET(url = paste0("http://", bds, "/dts/api/files/",file_id,"/versus_metadata"), httpheader = httpheader)
+    #print(techmd)
+    #res_vmd      <- httpGET(url = paste0("http://", bds, "/dts/api/files/",file_id,"/versus_metadata"), httpheader = httpheader)
+    res_vmd      <- httpGET(url = paste0(bds, "/dts/api/files/",file_id,"/versus_metadata"), httpheader = httpheader)
     versusmd     <- fromJSON(res_vmd)
     metadatalist <- list(id = unbox(tags$id), filename = unbox(tags$filename), tags = tags$tags, technicalmetadata = techmd, versusmetadata = versusmd)
+    #metadatalist <- list(id = unbox(tags$id), filename = unbox(tags$filename), tags = tags$tags, technicalmetadata = techmd)
     metadata <- toJSON(metadatalist)
     return(metadata)
   }
@@ -198,7 +190,7 @@ browndog.extract = function (bds, file, wait = 60, key){
 #' @param key: The key for the DTS. Deafult is ''.
 #' @return: The indexed directory. A '.index.tsv' file will now be present containing the derived data
 
-browndog.index = function(bds, directory, wait=60, key=''){
+browndog.index = function(bds, directory, wait=60){
   #if(!endsWith(directory,'/')){
   #  directory<-paste0(directory,'/')
   #}
@@ -207,7 +199,7 @@ browndog.index = function(bds, directory, wait=60, key=''){
   files<-list.files(directory)
   for(i in 1:length(files)){
     #print(files[i])
-    metadata <- browndog.extract(bds, paste0(directory,files[i]), wait, key)
+    metadata <- browndog.extract(bds, paste0(directory,files[i]), wait)
     tags<-fromJSON(metadata)$tags
     #print(tags)
     line<- toString(files[i])
