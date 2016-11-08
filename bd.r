@@ -6,10 +6,13 @@ library(jsonlite)
 library(gdata)
 
 args <- commandArgs(trailingOnly = TRUE)
-username <- args[1]
-password <- args[2]
-key <- args[3]
+username <- grep('username', args, value=TRUE)
+username <- substr(username, 12, nchar(username))
+password <- grep('password', args, value=TRUE)
+password <- substr(password, 12, nchar(password))
+key <- ""
 
+print (username)
 # Get a key from the BD API gateway to access BD services
 #' @param bds: URL of the BD API gateway
 #' @return BD API key 
