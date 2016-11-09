@@ -9,7 +9,7 @@ print(key)
 #browndog.saveKey(key)
 
 #Obtain and save an access token for the key
-token <- browndog.getToken("https://bd-api.ncsa.illinois.edu")
+token <- browndog.getToken("https://bd-api.ncsa.illinois.edu",key)
 #token <- browndog.getToken("localhost:8080")
 print(token)
 #browndog.saveToken(token)

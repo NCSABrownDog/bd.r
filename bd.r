@@ -167,12 +167,12 @@ browndog.convert = function (bds, input_filename, output, output_path, token, wa
 browndog.extract = function (bds, file, token, wait = 60){
   if(startsWith(file,'http://') || startsWith(file,'https://')){
     postbody   <- toJSON(list(fileurl = unbox(file)))
-    httpheader <- c("Content-Type" = "application/json", "Accept" = "application/json", "Authorization" = token)
+    httpheader <- c("Content-Type" = "application/json", "Accept" = "application/json", "Authorization" = token, "Transfer-Encoding: chunked")
     uploadurl  <- paste0("https://", bds,"/dts/api/extractions/upload_url") 
     #uploadurl  <- paste0(bds,"/dts/api/extractions/upload_url") #for localhost
     res_upload <- httpPOST(url = uploadurl, postfields = postbody, httpheader = httpheader)
   } else{
-    httpheader <- c("Accept" = "application/json", "Authorization" = token)
+    httpheader <- c("Accept" = "application/json", "Authorization" = token, "Transfer-Encoding: chunked")
     curloptions <-list(httpheader=httpheader)
     res_upload <- postForm(paste0("https://", bds,"/dts/api/extractions/upload_file"),
                   "File" = fileUpload(file),
