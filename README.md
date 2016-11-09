@@ -13,7 +13,7 @@
 
 * Brown Dog R Library (BD-R) consists of 4 files:
  	* bd.r - It contains all Brown Dog service related methods
-	* config.r - Provid your BD user name and password in this file. 
+	* config.r - Provide your BD user name and password in this file. 
 	* key.r - Provide your Brown Dog access key and token in this file. If you do not have one, use browndog.getKey(), browndog.getToken to obtain and use browndog.saveKeyToken() to save. See the complete method definition in bd.r and usage in examples_bdlib.r
  	* examples_bdlib.r - provide some examples usage as how to use BD-R
 * 	Note that you need to use ```source("/path/to/bd.r")``` to use BD-R
