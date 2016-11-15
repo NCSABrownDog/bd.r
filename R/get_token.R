@@ -6,6 +6,8 @@
 #' @return BD API Token 
 #' @export
 get_token = function(url, key){
+  library(RCurl)
+  library(jsonlite)
   httpheader <- c("Accept" = "application/json")
   bdsURL <- paste0(url,"/keys/",key,"/tokens")
   responseToken <- httpPOST(url = bdsURL, httpheader = httpheader)

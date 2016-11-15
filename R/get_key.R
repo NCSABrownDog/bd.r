@@ -8,6 +8,7 @@
 #' @export
 get_key = function(url, username, password){
   library(RCurl)
+  library(jsonlite)
   if(grepl("@", url)){
     auth_host   <- strsplit(url,'@')
     url         <- auth_host[[1]][2]

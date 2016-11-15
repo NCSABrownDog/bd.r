@@ -9,6 +9,7 @@
 #'  
 extract_file = function (url, file, token, wait = 60){
   library(RCurl)
+  library(jsonlite)
   if(startsWith(file,'http://') || startsWith(file,'https://')){
     postbody   <- toJSON(list(fileurl = unbox(file)))
     httpheader <- c("Content-Type" = "application/json", "Accept" = "application/json", "Authorization" = token)
