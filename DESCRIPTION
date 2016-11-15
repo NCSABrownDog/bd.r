@@ -1,4 +1,4 @@
-Package: bd.r
+Package: BrownDog
 Type: Package
 Title: Brown Dog R Library
 Version: 1.0.0
@@ -8,13 +8,9 @@ Maintainer: Rob Kooper <kooper@illinois.edu>
 Description: Researchers in these disciplines sometimes require to work with or to explore their difficult datasets.  Towards this they could leverage the Brown Dog Services (DAP/DTS). For ease of the researchers, we built a R library that wraps Brown Dog REST API and provides modules to identify the conversion options for a file/dataset, to convert file/dataset to appropriate format, to index collections and to query collections. This R library can also be easily integrated with other statistical software written in R. So, the researcher need not require learning a new programming language and prior knowledge of R is sufficient to use Brown Dog services.
 Additional Repositories: https://opensource.ncsa.illinois.edu/bitbucket/projects/BD/repos/bd.r/browse
 Imports:
-    RCurl,
-    bitops,
-    hash,
-    jsonlite,
-    gdata
+    RCurl
 License: FreeBSD + file LICENSE
 Copyright: Authors
 LazyLoad: yes
 LazyData: FALSE
-RoxygenNote: 5.0.1
+RoxygenNote: 5.0.1.9000
