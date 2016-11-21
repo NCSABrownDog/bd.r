@@ -19,7 +19,7 @@ convert_file = function (url, input_filename, output, output_path, token, wait=6
   inputbasename   <- strsplit(basename(input_filename),'\\.')
   outputfile      <- paste0(output_path,inputbasename[[1]][1],".", output)
   if (download){
-    output_filename <- browndog.download(url[1], outputfile, token, wait)
+    output_filename <- download(url[1], outputfile, token, wait)
   }else{
     return(url[1]) 
   }
