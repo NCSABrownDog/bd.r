@@ -7,6 +7,7 @@
 #' @return BD API key 
 #' @export
 get_key = function(url, username, password){
+  library(bitops)
   library(RCurl)
   library(jsonlite)
   if(grepl("@", url)){
