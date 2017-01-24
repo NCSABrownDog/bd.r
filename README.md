@@ -3,5 +3,6 @@
 ## Installation
 ``` 
 library(devtools)
-install_github("ncsa/bd.r")
+install_github("NCSABrownDog/bd.r")
+library(BrownDog)
 ```

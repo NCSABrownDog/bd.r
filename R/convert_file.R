@@ -4,7 +4,7 @@
 #' @param url: The URL to the Brown Dog Server to use
 #' @param input_filename: The input filename
 #' @param output: The output format extension
-#' @param output_path: The path for the created output file. May contain different filename
+#' @param output_path: The path for the created output file. May contain different filename. note the path ends with '/'
 #' @param token: Brown Dog access token
 #' @param wait: The amount of time to wait for the DAP service to respond. Default is 60
 #' @return: The output filename 
