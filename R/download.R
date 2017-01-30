@@ -1,10 +1,9 @@
-# Download file from browndog
-# 
-# This will download a file, if a 404 is returned it will wait until
-# the file is available. If the file is still not available after
-# timeout tries, it will return NA. If the file is downloaded it will
-# return the name of the file
-# 
+#' Download file from browndog
+#' 
+#' This will download a file, if a 404 is returned it will wait until
+#' the file is available. If the file is still not available after
+#' timeout tries, it will return NA. If the file is downloaded it will
+#' return the name of the file
 #' @param url: the url of the file to download
 #' @param file: the filename
 #' @param token: Brown Dog access token

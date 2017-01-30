@@ -4,17 +4,19 @@
 \alias{convert_file}
 \title{convert file}
 \usage{
-convert_file(url, input_filename, output, output_path, token, wait = 60,
-  download = TRUE)
+convert_file(url, input_file, isInputURL = FALSE, output, output_path, token,
+  wait = 60, download = TRUE)
 }
 \arguments{
 \item{url:}{The URL to the Brown Dog Server to use}
 
-\item{input_filename:}{The input filename}
+\item{input_file:}{The input filename, either local file with path, or file url}
+
+\item{isInputURL:}{whether input_file is an URL link}
 
 \item{output:}{The output format extension}
 
-\item{output_path:}{The path for the created output file. May contain different filename}
+\item{output_path:}{The path for the created output file. May contain different filename. note the path ends with '/'}
 
 \item{token:}{Brown Dog access token}
 
@@ -26,4 +28,3 @@ convert_file(url, input_filename, output, output_path, token, wait = 60,
 \description{
 Convert a file using Brown Dog Conversion service
 }
-
