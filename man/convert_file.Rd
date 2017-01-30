@@ -4,7 +4,7 @@
 \alias{convert_file}
 \title{convert file}
 \usage{
-convert_file(url, input_file, isInputURL = FALSE, output, output_path, token,
+convert_file(url, input_file, output, output_path, token,
   wait = 60, download = TRUE)
 }
 \arguments{
