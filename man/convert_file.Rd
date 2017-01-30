@@ -12,8 +12,6 @@ convert_file(url, input_file, isInputURL = FALSE, output, output_path, token,
 
 \item{input_file:}{The input filename, either local file with path, or file url}
 
-\item{isInputURL:}{whether input_file is an URL link}
-
 \item{output:}{The output format extension}
 
 \item{output_path:}{The path for the created output file. May contain different filename. note the path ends with '/'}

@@ -3,18 +3,17 @@
 #' Convert a file using Brown Dog Conversion service
 #' @param url: The URL to the Brown Dog Server to use
 #' @param input_file: The input file, either local file with path, or file url
-#' @param isInputURL: whether input_file is an URL link
 #' @param output: The output format extension
 #' @param output_path: The path for the created output file. May contain different filename. note the path ends with '/'
 #' @param token: Brown Dog access token
 #' @param wait: The amount of time to wait for the DAP service to respond. Default is 60
 #' @return: The output filename 
 #' @export
-convert_file = function (url, input_file, isInputURL=FALSE, output, output_path, token, wait=60, download=TRUE){
+convert_file = function (url, input_file, output, output_path, token, wait=60, download=TRUE){
   library(RCurl)
   httpheader <- c(Accept="text/plain", Authorization = token)
   curloptions <- list(httpheader = httpheader)
-  if(isInputURL){
+  if(startsWith(file,'http://') || startsWith(file,'https://')){
     convert_api <- paste0(url,"/dap/convert/", output, "/", encodeURIComponent(input_file)) 
     result_bds <- getURL(convert_api,.opts = curloptions)
   }
