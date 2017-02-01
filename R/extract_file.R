@@ -10,7 +10,7 @@
 extract_file = function (url, file, token, wait = 60){
   library(RCurl)
   library(jsonlite)
-  if(startsWith(file,'http://') || startsWith(file,'https://')){
+  if(startsWith(file,'http://') || startsWith(file,'https://') || startsWith(file,'ftp://')){
     postbody   <- toJSON(list(fileurl = unbox(file)))
     httpheader <- c("Content-Type" = "application/json", "Accept" = "application/json", "Authorization" = token)
     uploadurl  <- paste0(bds,"/dts/api/extractions/upload_url") 

@@ -13,7 +13,7 @@ convert_file = function (url, input_file, output, output_path, token, wait=60, d
   library(RCurl)
   httpheader <- c(Accept="text/plain", Authorization = token)
   curloptions <- list(httpheader = httpheader)
-  if(startsWith(file,'http://') || startsWith(file,'https://')){
+  if(startsWith(input_file,'http://') || startsWith(input_file,'https://') || startsWith(input_file,'ftp://')){
     convert_api <- paste0(url,"/dap/convert/", output, "/", encodeURIComponent(input_file)) 
     result_bds <- getURL(convert_api,.opts = curloptions)
   }
