@@ -20,7 +20,7 @@ Imports:
     jsonlite,
     httpuv,
     utils
-License: FreeBSD 
+License: FreeBSD | file LICENSE
 Copyright: Authors
 LazyLoad: yes
 LazyData: FALSE
