@@ -2,6 +2,11 @@
 
 export(convert_file)
 export(download)
+export(extract_file)
 export(get_key)
 export(get_output_formats)
 export(get_token)
+import(RCurl)
+import(httpuv)
+import(jsonlite)
+import(utils)

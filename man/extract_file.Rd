@@ -7,13 +7,13 @@
 extract_file(url, file, token, wait = 60)
 }
 \arguments{
-\item{url:}{The URL to the Brown Dog server to use.}
+\item{url}{The URL to the Brown Dog server to use.}
 
-\item{file:}{The input file could be URL or file with the path}
+\item{file}{The input file could be URL or file with the path}
 
-\item{token:}{Brown Dog access token}
+\item{token}{Brown Dog access token}
 
-\item{wait:}{The amount of time to wait for the DTS to respond. Default is 60 seconds}
+\item{wait}{The amount of time to wait for the DTS to respond. Default is 60 seconds}
 }
 \value{
 The extracted metadata in JSON format
@@ -21,4 +21,3 @@ The extracted metadata in JSON format
 \description{
 Extract content-based metadata from the given input file's content using Brown Dog extraction service
 }
-

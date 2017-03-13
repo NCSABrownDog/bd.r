@@ -7,16 +7,16 @@
 download(url, file, token, timeout = 60)
 }
 \arguments{
-\item{timeout}{: timeout number of seconds to wait for file (default 60)}
+\item{url}{the url of the file to download}
 
-\item{url:}{the url of the file to download}
+\item{file}{the filename}
 
-\item{file:}{the filename}
+\item{token}{Brown Dog access token}
 
-\item{token:}{Brown Dog access token}
+\item{timeout}{timeout number of seconds to wait for file (default 60)}
 }
 \value{
-: the name of file if successfull or NA if not.
+the name of file if successfull or NA if not.
 }
 \description{
 This will download a file, if a 404 is returned it will wait until

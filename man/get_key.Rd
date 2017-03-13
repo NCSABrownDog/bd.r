@@ -7,11 +7,11 @@
 get_key(url, username, password)
 }
 \arguments{
-\item{url:}{URL of the BD API gateway}
+\item{url}{URL of the BD API gateway}
 
-\item{username:}{user name for BrownDog}
+\item{username}{user name for BrownDog}
 
-\item{password:}{password for BrownDog}
+\item{password}{password for BrownDog}
 }
 \value{
 BD API key
@@ -19,4 +19,3 @@ BD API key
 \description{
 Get a key from the BD API gateway to access BD services
 }
-

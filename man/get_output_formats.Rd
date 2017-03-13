@@ -7,11 +7,11 @@
 get_output_formats(url, inputformat, token)
 }
 \arguments{
-\item{url:}{The URL to the Brown Dog server to use.}
+\item{url}{The URL to the Brown Dog server to use.}
 
-\item{input:}{The format of the input file.}
+\item{inputformat}{The format of the input file.}
 
-\item{token:}{Brown Dog access token}
+\item{token}{Brown Dog access token}
 }
 \value{
 : A string array of reachable output format extensions.
@@ -19,4 +19,3 @@ get_output_formats(url, inputformat, token)
 \description{
 Check Brown Dog Service for available output formats for the given input format.
 }
-

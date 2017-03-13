@@ -4,24 +4,26 @@
 \alias{convert_file}
 \title{convert file}
 \usage{
-convert_file(url, input_file, output, output_path, token,
-  wait = 60, download = TRUE)
+convert_file(url, input_file, output, output_path, token, wait = 60,
+  download = TRUE)
 }
 \arguments{
-\item{url:}{The URL to the Brown Dog Server to use}
+\item{url}{The URL to the Brown Dog Server to use}
 
-\item{input_file:}{The input filename, either local file with path, or file url}
+\item{input_file}{The input file, either local file with path, or file url}
 
-\item{output:}{The output format extension}
+\item{output}{The output format extension}
 
-\item{output_path:}{The path for the created output file. May contain different filename. note the path ends with '/'}
+\item{output_path}{The path for the created output file. May contain different filename. note the path ends with '/'}
 
-\item{token:}{Brown Dog access token}
+\item{token}{Brown Dog access token}
 
-\item{wait:}{The amount of time to wait for the DAP service to respond. Default is 60}
+\item{wait}{The amount of time to wait for the DAP service to respond. Default is 60}
+
+\item{download}{The flag to download the result file. Default is true}
 }
 \value{
-: The output filename
+The output filename
 }
 \description{
 Convert a file using Brown Dog Conversion service

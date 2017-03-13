@@ -7,9 +7,9 @@
 get_token(url, key)
 }
 \arguments{
-\item{url:}{URL of the BD API gateway}
+\item{url}{URL of the BD API gateway}
 
-\item{key:}{permanet key for BD API}
+\item{key}{permanet key for BD API}
 }
 \value{
 BD API Token
@@ -17,4 +17,3 @@ BD API Token
 \description{
 Get a Token from the BD API gateway to access BD services
 }
-
