@@ -17,3 +17,9 @@ BD API Token
 \description{
 Get a Token from the BD API gateway to access BD services
 }
+\examples{
+\dontrun{
+key <- get_key("https://bd-api-dev.ncsa.illinois.edu", "your email", "password")
+get_token("https://bd-api-dev.ncsa.illinois.edu", key)
+}
+}

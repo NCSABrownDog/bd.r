@@ -19,3 +19,8 @@ BD API key
 \description{
 Get a key from the BD API gateway to access BD services
 }
+\examples{
+\dontrun{
+get_key("https://bd-api-dev.ncsa.illinois.edu", "your email", "password")
+}
+}

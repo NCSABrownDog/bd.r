@@ -6,6 +6,13 @@
 #' @param token Brown Dog access token
 #' @return: A string array of reachable output format extensions.
 #' @import RCurl
+#' @examples 
+#' \dontrun{
+#' key <- get_key("https://bd-api-dev.ncsa.illinois.edu", "your email", "password")
+#' token <- get_token("https://bd-api-dev.ncsa.illinois.edu", key)
+#' get_output_formats("https://bd-api-dev.ncsa.illinois.edu", "csv", 
+#' token)
+#' }
 #' @export
 get_output_formats = function(url, inputformat, token){
   api_call    <- paste0(url, "/dap/inputs/", inputformat)

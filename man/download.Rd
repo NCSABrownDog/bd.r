@@ -24,3 +24,10 @@ the file is available. If the file is still not available after
 timeout tries, it will return NA. If the file is downloaded it will
 return the name of the file
 }
+\examples{
+\dontrun{
+key <- get_key("https://bd-api-dev.ncsa.illinois.edu", "your email", "password")
+token <- get_token("https://bd-api-dev.ncsa.illinois.edu", key)
+download("https://bd-api-dev.ncsa.illinois.edu", "vdc.csv", token)
+}
+}

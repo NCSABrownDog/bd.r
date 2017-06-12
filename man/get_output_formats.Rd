@@ -19,3 +19,11 @@ get_output_formats(url, inputformat, token)
 \description{
 Check Brown Dog Service for available output formats for the given input format.
 }
+\examples{
+\dontrun{
+key <- get_key("https://bd-api-dev.ncsa.illinois.edu", "your email", "password")
+token <- get_token("https://bd-api-dev.ncsa.illinois.edu", key)
+get_output_formats("https://bd-api-dev.ncsa.illinois.edu", "csv", 
+token)
+}
+}

@@ -6,6 +6,11 @@
 #' @return BD API Token 
 #' @import RCurl
 #' @import jsonlite
+#' @examples 
+#' \dontrun{
+#' key <- get_key("https://bd-api-dev.ncsa.illinois.edu", "your email", "password")
+#' get_token("https://bd-api-dev.ncsa.illinois.edu", key)
+#' }
 #' @export
 get_token = function(url, key){
 

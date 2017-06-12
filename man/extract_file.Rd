@@ -21,3 +21,11 @@ The extracted metadata in JSON format
 \description{
 Extract content-based metadata from the given input file's content using Brown Dog extraction service
 }
+\examples{
+\dontrun{
+key <- get_key("https://bd-api-dev.ncsa.illinois.edu", "your email", "password")
+token <- get_token("https://bd-api-dev.ncsa.illinois.edu", key)
+extract_file("https://bd-api-dev.ncsa.illinois.edu", 
+"http://browndog.ncsa.illinois.edu/examples/gi/Dongying_sample.csv", token)
+}
+}

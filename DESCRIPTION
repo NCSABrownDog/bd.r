@@ -2,7 +2,7 @@ Package: BrownDog
 Type: Package
 Title: Brown Dog R Library
 Version: 1.0.0
-Date: 2016-11-08
+Date: 2017-06-12
 Author: Smruti Padhy, Rob Kooper, Yan Zhao
 Maintainer: Rob Kooper <kooper@illinois.edu>
 Description: Researchers in these disciplines sometimes require to work with or to explore their difficult 

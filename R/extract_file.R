@@ -8,6 +8,13 @@
 #' @return The extracted metadata in JSON format
 #' @import RCurl
 #' @import jsonlite
+#' @examples
+#' \dontrun{
+#' key <- get_key("https://bd-api-dev.ncsa.illinois.edu", "your email", "password")
+#' token <- get_token("https://bd-api-dev.ncsa.illinois.edu", key)
+#' extract_file("https://bd-api-dev.ncsa.illinois.edu", 
+#' "http://browndog.ncsa.illinois.edu/examples/gi/Dongying_sample.csv", token)
+#' }
 #' @export
 #'  
 extract_file = function (url, file, token, wait = 60){

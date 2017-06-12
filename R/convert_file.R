@@ -11,6 +11,14 @@
 #' @return The output filename 
 #' @import RCurl
 #' @import httpuv
+#' @examples 
+#' \dontrun{
+#' key <- get_key("https://bd-api-dev.ncsa.illinois.edu", "your email", "password")
+#' token <- get_token("https://bd-api-dev.ncsa.illinois.edu", key)
+#' convert_file("https://bd-api-dev.ncsa.illinois.edu", 
+#' "http://browndog.ncsa.illinois.edu/examples/gi/Dongying_sample.csv", "xlsx", "/", 
+#' token)
+#' }
 #' @export
 convert_file = function (url, input_file, output, output_path, token, wait=60, download=TRUE){
   httpheader <- c(Accept="text/plain", Authorization = token)

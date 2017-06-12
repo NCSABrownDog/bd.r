@@ -10,6 +10,12 @@
 #' @param timeout timeout number of seconds to wait for file (default 60)
 #' @return the name of file if successfull or NA if not.
 #' @import RCurl
+#' @examples 
+#' \dontrun{
+#' key <- get_key("https://bd-api-dev.ncsa.illinois.edu", "your email", "password")
+#' token <- get_token("https://bd-api-dev.ncsa.illinois.edu", key)
+#' download("https://bd-api-dev.ncsa.illinois.edu", "vdc.csv", token)
+#' }
 #' @export
 download = function(url, file, token, timeout = 60) {
   count <- 0
