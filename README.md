@@ -1,4 +1,4 @@
-# Brown Dog R Library (BD-R):
+# Brown Dog R Package (BD-R):
 
 ## Installation
 
