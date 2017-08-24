@@ -15,7 +15,7 @@
 get_token = function(url, key){
 
   httpheader <- c("Accept" = "application/json")
-  bdsURL <- paste0(url,"/keys/",key,"/tokens")
+  bdsURL <- paste0(url,"/v1/keys/",key,"/tokens")
   responseToken <- RCurl::httpPOST(url = bdsURL, httpheader = httpheader)
   token <- jsonlite::fromJSON(responseToken)[[1]]
   return(token)

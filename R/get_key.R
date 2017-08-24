@@ -20,10 +20,10 @@ get_key = function(url, username, password){
     url         <- auth_host[[1]][2]
     auth        <- strsplit(auth_host[[1]][1],'//')
     userpass    <- utils::URLdecode(auth[[1]][2])
-    bdsURL      <- paste0(auth[[1]][1],"//", url, "/keys")
+    bdsURL      <- paste0(auth[[1]][1],"//", url, "/v1/keys")
   }else{
     userpass <- paste0(username,":", password)
-    bdsURL <- paste0(url,"/keys")
+    bdsURL <- paste0(url,"/v1/keys")
   }
   curloptions <- list(userpwd = userpass, httpauth = 1L)
   httpheader <- c("Accept" = "application/json")
