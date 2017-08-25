@@ -1,8 +1,8 @@
 Package: BrownDog
 Type: Package
 Title: Brown Dog R Interface
-Version: 0.2.0
-Date: 2017-06-28
+Version: 0.2.1
+Date: 2017-08-25
 Author: Smruti Padhy, Rob Kooper, Yan Zhao
 Maintainer: Yan Zhao <yanzhao3@illinois.edu>
 Description: An R interface for the Brown Dog which allows researchers to leverage Brown Dog Services 
