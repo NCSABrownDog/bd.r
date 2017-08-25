@@ -46,11 +46,11 @@ extract_file = function (url, file, token, wait = 60){
       Sys.sleep(2)
       wait <- wait -1  
     }
-    res_tags     <- RCurl::httpGET(url = paste0(url, "/v1/extractions/", file_id,"/tags"), httpheader = httpheader)
+    res_tags     <- RCurl::httpGET(url = paste0(url, "/v1/extractions/files/", file_id,"/tags"), httpheader = httpheader)
     tags         <- jsonlite::fromJSON(res_tags)
-    res_techmd   <- RCurl::httpGET(url = paste0(url,"/v1/extractions/",file_id,"/metadata.jsonld"), httpheader = httpheader)
+    res_techmd   <- RCurl::httpGET(url = paste0(url,"/v1/extractions/files/",file_id,"/metadata.jsonld"), httpheader = httpheader)
     techmd       <- jsonlite::fromJSON(res_techmd, simplifyDataFrame = FALSE)
-    res_vmd      <- RCurl::httpGET(url = paste0(url, "/v1/extractions/",file_id,"/versus_metadata"), httpheader = httpheader)
+    res_vmd      <- RCurl::httpGET(url = paste0(url, "/v1/extractions/files/",file_id,"/versus_metadata"), httpheader = httpheader)
     versusmd     <- jsonlite::fromJSON(res_vmd)
     metadatalist <- list(id = jsonlite::unbox(tags$id), filename = jsonlite::unbox(tags$filename), tags = tags$tags, technicalmetadata = techmd, versusmetadata = versusmd)
     #metadatalist <- list(id = unbox(tags$id), filename = unbox(tags$filename), tags = tags$tags, technicalmetadata = techmd)
