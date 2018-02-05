@@ -15,7 +15,7 @@
 #' }
 #' @export
 get_output_formats = function(url, inputformat, token){
-  api_call    <- paste0(url, "/dap/inputs/", inputformat)
+  api_call    <- paste0(url, "/v1/conversions/inputs/", inputformat)
   httpheader  <- c("Accept" = "text/plain", "Authorization" = token)
   r   <- RCurl::httpGET(url = api_call, httpheader = httpheader)
   arr <- strsplit(r,"\n")

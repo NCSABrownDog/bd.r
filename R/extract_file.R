@@ -22,12 +22,12 @@ extract_file = function (url, file, token, wait = 60){
   if(startsWith(file,'http://') || startsWith(file,'https://') || startsWith(file,'ftp://')){
     postbody   <- jsonlite::toJSON(list(fileurl = unbox(file)))
     httpheader <- c("Content-Type" = "application/json", "Accept" = "application/json", "Authorization" = token)
-    uploadurl  <- paste0(url,"/dts/api/extractions/upload_url") 
+    uploadurl  <- paste0(url,"/v1/extractions/url") 
     res_upload <- RCurl::httpPOST(url = uploadurl, postfields = postbody, httpheader = httpheader)
   } else{
     httpheader <- c("Accept" = "application/json", "Authorization" = token)
     curloptions <-list(httpheader=httpheader)
-    res_upload <- RCurl::postForm(paste0(url,"/dts/api/extractions/upload_file"),
+    res_upload <- RCurl::postForm(paste0(url,"/v1/extractions/file"),
                            "File" = fileUpload(file),
                            .opts = curloptions)
   }
@@ -37,7 +37,7 @@ extract_file = function (url, file, token, wait = 60){
   httpheader  <- c("Accept" = "application/json", "Authorization" = token )
   if (file_id != ""){
     while (wait > 0){
-      res_status <- httpGET(url = paste0(url, "/dts/api/extractions/",file_id,"/status"), httpheader = httpheader)
+      res_status <- httpGET(url = paste0(url, "/v1/extractions/",file_id,"/status"), httpheader = httpheader)
       status     <- jsonlite::fromJSON(res_status)
       if (status$Status == "Done"){
         #print(status)
@@ -46,11 +46,11 @@ extract_file = function (url, file, token, wait = 60){
       Sys.sleep(2)
       wait <- wait -1  
     }
-    res_tags     <- RCurl::httpGET(url = paste0(url, "/dts/api/files/", file_id,"/tags"), httpheader = httpheader)
+    res_tags     <- RCurl::httpGET(url = paste0(url, "/v1/extractions/files/", file_id,"/tags"), httpheader = httpheader)
     tags         <- jsonlite::fromJSON(res_tags)
-    res_techmd   <- RCurl::httpGET(url = paste0(url,"/dts/api/files/",file_id,"/metadata.jsonld"), httpheader = httpheader)
+    res_techmd   <- RCurl::httpGET(url = paste0(url,"/v1/extractions/files/",file_id,"/metadata.jsonld"), httpheader = httpheader)
     techmd       <- jsonlite::fromJSON(res_techmd, simplifyDataFrame = FALSE)
-    res_vmd      <- RCurl::httpGET(url = paste0(url, "/dts/api/files/",file_id,"/versus_metadata"), httpheader = httpheader)
+    res_vmd      <- RCurl::httpGET(url = paste0(url, "/v1/extractions/files/",file_id,"/versus_metadata"), httpheader = httpheader)
     versusmd     <- jsonlite::fromJSON(res_vmd)
     metadatalist <- list(id = jsonlite::unbox(tags$id), filename = jsonlite::unbox(tags$filename), tags = tags$tags, technicalmetadata = techmd, versusmetadata = versusmd)
     #metadatalist <- list(id = unbox(tags$id), filename = unbox(tags$filename), tags = tags$tags, technicalmetadata = techmd)

@@ -24,11 +24,11 @@ convert_file = function (url, input_file, output, output_path, token, wait=60, d
   httpheader <- c(Accept="text/plain", Authorization = token)
   curloptions <- list(httpheader = httpheader)
   if(startsWith(input_file,'http://') || startsWith(input_file,'https://') || startsWith(input_file,'ftp://')){
-    convert_api <- paste0(url,"/dap/convert/", output, "/", httpuv::encodeURIComponent(input_file)) 
+    convert_api <- paste0(url,"/v1/conversions/", output, "/", httpuv::encodeURIComponent(input_file)) 
     result_bds <- getURL(convert_api,.opts = curloptions)
   }
   else{
-    convert_api <- paste0(url,"/dap/convert/", output, "/") 
+    convert_api <- paste0(url,"/v1/conversions/", output, "/") 
     result_bds <- RCurl::postForm(convert_api,"file"= RCurl::fileUpload(input_file),.opts = curloptions)
   }
   #convert is not success

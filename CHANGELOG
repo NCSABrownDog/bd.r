@@ -1,0 +1,6 @@
+# Change Log
+
+
+## 0.2.1 - 2017-08-25
+### Fixed
+- Upgraded the bd-api to v1. [BD-1736](https://opensource.ncsa.illinois.edu/jira/browse/BD-1736)
